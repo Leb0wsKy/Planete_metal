@@ -5,22 +5,34 @@ document.getElementById('year').textContent = new Date().getFullYear();
 const burger = document.querySelector('.nav__burger');
 const links = document.querySelector('.nav__links');
 burger?.addEventListener('click', () => {
+  if (!links) return;
   const willOpen = !links.classList.contains('is-open');
   links.classList.toggle('is-open', willOpen);
   burger.setAttribute('aria-expanded', String(willOpen));
 });
 
 window.addEventListener('resize', () => {
+  if (!links) return;
   if (window.innerWidth > 720 && links.classList.contains('is-open')) {
     links.classList.remove('is-open');
     burger?.setAttribute('aria-expanded', 'false');
   }
 });
 
+document.addEventListener('click', (event) => {
+  if (!links || !burger || window.innerWidth > 720) return;
+  if (!links.classList.contains('is-open')) return;
+  const target = event.target;
+  if (target instanceof Node && !links.contains(target) && !burger.contains(target)) {
+    links.classList.remove('is-open');
+    burger.setAttribute('aria-expanded', 'false');
+  }
+});
+
 // Smooth scroll for anchor links closes mobile menu
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', () => {
-    if (window.innerWidth <= 720) {
+    if (window.innerWidth <= 720 && links) {
       links.classList.remove('is-open');
       burger?.setAttribute('aria-expanded', 'false');
     }
@@ -91,8 +103,14 @@ form?.addEventListener('submit', (e) => {
   });
 
   function setup() {
-    const visible = window.innerWidth <= 720 ? 1 : (window.innerWidth <= 1040 ? 2 : 3);
-    const cardW = (carousel.offsetWidth - gap * (visible - 1)) / visible;
+    const mobile = window.innerWidth <= 720;
+    const visible = mobile ? 1 : (window.innerWidth <= 1040 ? 2 : 3);
+    const baseWidth = (carousel.offsetWidth - gap * (visible - 1)) / visible;
+    const cardW = mobile
+      ? Math.min(Math.max(baseWidth || 0, 280), 420)
+      : baseWidth;
+
+    track.style.animation = mobile ? 'none' : '';
     [...track.querySelectorAll('.card')].forEach(c => { c.style.width = cardW + 'px'; });
 
     // The slide distance = exactly half the track (the 6 original cards)
