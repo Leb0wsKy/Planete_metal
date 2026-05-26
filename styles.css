@@ -107,6 +107,7 @@ h3{font-size:1.25rem;font-weight:600}
 .nav__burger span{transition:background .2s,transform .2s}
 .nav__burger span{width:22px;height:2px;background:#fff;border-radius:2px}
 
+
 /* ---------- BUTTONS ---------- */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
@@ -390,9 +391,16 @@ h3{font-size:1.25rem;font-weight:600}
 }
 .tem-dot.active{background:var(--accent);transform:scale(1.35)}
 @media(max-width:900px){
-  .temoignages-section{flex-direction:column}
-  .temoignages__left{flex:none;width:100%}
-  .temoignages__inner{padding:60px 32px}
+  .temoignages-section{display:block;min-height:auto}
+  .temoignages__left{display:none}
+  .temoignages__inner{
+    position:relative;
+    top:auto;
+    left:auto;
+    right:auto;
+    transform:none;
+    padding:60px 32px 24px;
+  }
   .temoignages__right{position:relative;width:100%;height:280px;bottom:auto}
   .temoignages__curve{display:none}
 }
@@ -458,17 +466,65 @@ h3{font-size:1.25rem;font-weight:600}
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width:960px){
+  .container{padding:0 20px}
+  .hero__content{padding:110px 20px 70px}
+  .section{padding:92px 0}
   .grid-3{grid-template-columns:repeat(2,1fr)}
   .steps{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:720px){
-  .nav__links{display:none}
+  h1{font-size:clamp(2rem,10vw,2.8rem)}
+  h2{font-size:clamp(1.6rem,8vw,2.2rem)}
+  .container{padding:0 16px}
+  .nav__inner{height:64px;gap:12px}
+  .brand__logo{height:34px}
+  .nav__links{
+    display:none;
+    position:absolute;
+    top:64px;
+    left:0;
+    right:0;
+    flex-direction:column;
+    gap:14px;
+    padding:16px;
+    background:#fff;
+    border-bottom:1px solid var(--line);
+    box-shadow:0 16px 28px -16px rgba(0,35,149,.35);
+    z-index:60;
+  }
+  .nav__links.is-open{display:flex}
+  .nav__links a{color:var(--ink);padding:6px 0}
+  .nav__links a::after{display:none}
   .nav__inner .btn{display:none}
   .nav__burger{display:flex}
   .grid-2,.grid-3{grid-template-columns:1fr}
   .steps{grid-template-columns:1fr}
   .section{padding:80px 0}
+  .hero{min-height:78vh}
+  .hero__content{padding:94px 16px 56px}
+  .hero__cta{gap:10px}
+  .hero__cta .btn{width:100%}
   .hero__stats{gap:28px}
+  .hero__stats strong{font-size:1.6rem}
+  .section__head{margin-bottom:38px}
+  .card__body,.product__body{padding:20px}
+  .steps li{padding:28px}
   .form .row{grid-template-columns:1fr}
   .contact__grid{gap:40px}
+  .temoignages__inner{padding:48px 16px 20px}
+  .temoignage{padding:24px}
+  .temoignages__slider{margin:0;padding:0 18px}
+  .tem-btn{width:30px;height:30px}
+  .tem-btn--prev{left:-6px}
+  .tem-btn--next{right:-6px}
+}
+
+@media (max-width:520px){
+  .btn--lg{padding:14px 20px;font-size:.95rem}
+  .hero__stats{gap:16px}
+  .hero__stats div{min-width:44%}
+  .trust{padding:20px 0}
+  .contact__mini-map{height:150px}
+  .footer__inner{justify-content:center;text-align:center}
+  .footer__links{justify-content:center;flex-wrap:wrap}
 }

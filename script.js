@@ -5,23 +5,25 @@ document.getElementById('year').textContent = new Date().getFullYear();
 const burger = document.querySelector('.nav__burger');
 const links = document.querySelector('.nav__links');
 burger?.addEventListener('click', () => {
-  const open = links.style.display === 'flex';
-  links.style.display = open ? '' : 'flex';
-  links.style.position = 'absolute';
-  links.style.top = '72px';
-  links.style.left = '0';
-  links.style.right = '0';
-  links.style.flexDirection = 'column';
-  links.style.background = '#fff';
-  links.style.padding = '20px 24px';
-  links.style.borderBottom = '1px solid var(--line)';
-  if (open) { links.removeAttribute('style'); }
+  const willOpen = !links.classList.contains('is-open');
+  links.classList.toggle('is-open', willOpen);
+  burger.setAttribute('aria-expanded', String(willOpen));
+});
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 720 && links.classList.contains('is-open')) {
+    links.classList.remove('is-open');
+    burger?.setAttribute('aria-expanded', 'false');
+  }
 });
 
 // Smooth scroll for anchor links closes mobile menu
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', () => {
-    if (window.innerWidth <= 720) links.removeAttribute('style');
+    if (window.innerWidth <= 720) {
+      links.classList.remove('is-open');
+      burger?.setAttribute('aria-expanded', 'false');
+    }
   });
 });
 
@@ -75,7 +77,6 @@ form?.addEventListener('submit', (e) => {
 
   const track = carousel.querySelector('.carousel__track');
   const gap = 24;
-  const visible = 3;
 
   // Strip reveal classes so cards are always visible inside the carousel
   const origCards = [...track.querySelectorAll('.card')];
@@ -90,6 +91,7 @@ form?.addEventListener('submit', (e) => {
   });
 
   function setup() {
+    const visible = window.innerWidth <= 720 ? 1 : (window.innerWidth <= 1040 ? 2 : 3);
     const cardW = (carousel.offsetWidth - gap * (visible - 1)) / visible;
     [...track.querySelectorAll('.card')].forEach(c => { c.style.width = cardW + 'px'; });
 
