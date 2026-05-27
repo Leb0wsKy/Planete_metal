@@ -291,6 +291,23 @@
   </section>
 </main>
 
+<button class="chat-toggle" id="chatToggle" type="button" aria-label="Ouvrir l'assistant de questions" aria-controls="faqChat" aria-expanded="false">
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M4 5.5A3.5 3.5 0 0 1 7.5 2h9A3.5 3.5 0 0 1 20 5.5v6A3.5 3.5 0 0 1 16.5 15H11l-4.8 4a.7.7 0 0 1-1.2-.54V15.4A3.5 3.5 0 0 1 4 11.5z"/>
+  </svg>
+</button>
+
+<section class="faq-chat" id="faqChat" aria-hidden="true" role="dialog" aria-label="Conversation rapide" aria-modal="false">
+  <header class="faq-chat__header">
+    <div>
+      <strong>Planète Métal Chat</strong>
+      <p>Choisissez une question</p>
+    </div>
+    <button class="faq-chat__close" id="chatClose" type="button" aria-label="Fermer la conversation">×</button>
+  </header>
+  <div class="faq-chat__messages" id="chatMessages"></div>
+</section>
+
 <div class="form-popup" id="formPopup" aria-hidden="true" role="status" aria-live="polite">
   <div class="form-popup__card">
     <div class="form-popup__icon">✓</div>

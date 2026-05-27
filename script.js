@@ -180,3 +180,128 @@ popup?.addEventListener('click', (event) => {
     setup();
   });
 })();
+
+// FAQ chat popup driven by faq.json
+(function () {
+  const chatToggle = document.getElementById('chatToggle');
+  const chatClose = document.getElementById('chatClose');
+  const chatPanel = document.getElementById('faqChat');
+  const messages = document.getElementById('chatMessages');
+  const quickRepliesClass = 'faq-chat__quick-replies';
+
+  if (!chatToggle || !chatClose || !chatPanel || !messages) return;
+
+  let faqItems = [];
+
+  function setChatOpen(isOpen) {
+    chatPanel.classList.toggle('is-open', isOpen);
+    chatPanel.setAttribute('aria-hidden', String(!isOpen));
+    chatToggle.setAttribute('aria-expanded', String(isOpen));
+  }
+
+  function appendBubble(text, type) {
+    const bubble = document.createElement('p');
+    bubble.className = `faq-chat__bubble faq-chat__bubble--${type}`;
+    bubble.textContent = text;
+    messages.appendChild(bubble);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function appendTypingIndicator() {
+    const bubble = document.createElement('div');
+    bubble.className = 'faq-chat__bubble faq-chat__bubble--bot';
+
+    const dots = document.createElement('div');
+    dots.className = 'faq-chat__typing';
+    dots.innerHTML = '<span class="faq-chat__dot"></span><span class="faq-chat__dot"></span><span class="faq-chat__dot"></span>';
+
+    bubble.appendChild(dots);
+    messages.appendChild(bubble);
+    messages.scrollTop = messages.scrollHeight;
+    return bubble;
+  }
+
+  function clearQuickReplies() {
+    const oldReplies = messages.querySelectorAll(`.${quickRepliesClass}`);
+    oldReplies.forEach((node) => node.remove());
+  }
+
+  function renderQuestionButtons(items) {
+    clearQuickReplies();
+
+    const wrap = document.createElement('div');
+    wrap.className = quickRepliesClass;
+
+    items.forEach((item) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'faq-chat__question-btn';
+      btn.textContent = item.question;
+      btn.addEventListener('click', () => {
+        clearQuickReplies();
+        appendBubble(item.question, 'user');
+
+        const typingBubble = appendTypingIndicator();
+
+        window.setTimeout(() => {
+          typingBubble.remove();
+          appendBubble(item.answer, 'bot');
+          renderQuestionButtons(faqItems);
+        }, 700);
+      });
+      wrap.appendChild(btn);
+    });
+
+    messages.appendChild(wrap);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  async function initFaq() {
+    try {
+      const res = await fetch('faq.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('Impossible de charger les questions.');
+
+      const data = await res.json();
+      faqItems = Array.isArray(data) ? data.slice(0, 4) : [];
+
+      if (!faqItems.length) {
+        appendBubble('Aucune question disponible pour le moment.', 'bot');
+        return;
+      }
+
+      appendBubble('Bonjour. Choisissez une question ci-dessous et je vous reponds instantanement.', 'bot');
+      renderQuestionButtons(faqItems);
+    } catch (_) {
+      appendBubble('Le service de conversation est temporairement indisponible.', 'bot');
+    }
+  }
+
+  chatToggle.addEventListener('click', (event) => {
+    event.stopPropagation();
+    const isOpen = !chatPanel.classList.contains('is-open');
+    setChatOpen(isOpen);
+  });
+
+  chatClose.addEventListener('click', (event) => {
+    event.stopPropagation();
+    setChatOpen(false);
+  });
+
+  chatPanel.addEventListener('click', (event) => {
+    event.stopPropagation();
+  });
+
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    if (!chatPanel.classList.contains('is-open')) return;
+    if (target.closest('#faqChat') || target.closest('#chatToggle')) return;
+    setChatOpen(false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') setChatOpen(false);
+  });
+
+  initFaq();
+})();
