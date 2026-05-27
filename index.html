@@ -15,7 +15,7 @@
 <header class="nav">
   <div class="container nav__inner">
     <a href="#" class="brand">
-      <img src="assets/logo-white.svg" alt="Planète Métal" class="brand__logo">
+      <img src="assets/logo-white.svg?v=20260526b" alt="Planète Métal" class="brand__logo">
     </a>
     <nav class="nav__links" id="siteNavLinks">
       <a href="#services">Services</a>
@@ -40,7 +40,7 @@
     </div>
     <div class="container hero__content">
       <span class="eyebrow">Installation • Maintenance • Dépannage</span>
-      <h1>Rideaux aluminium <em>sur mesure</em>, posés par des experts.</h1>
+      <h1>Rideaux métalliques <em>sur mesure</em>, posés par des experts.</h1>
       <p class="lead">Sécurité, isolation et design pour votre maison ou votre commerce. Devis sous 24h, pose en moins d'une semaine.</p>
       <div class="hero__cta">
         <a href="#contact" class="btn btn--primary btn--lg">Demander un devis</a>
@@ -150,7 +150,7 @@
           </div>
         </article>
         <article class="product">
-          <div class="product__img"><img src="assets/installer.jpg" alt="Rideau aluminium gamme Pro" loading="lazy" /></div>
+          <div class="product__img"><img src="assets/installer.png" alt="Rideau aluminium gamme Pro" loading="lazy" /></div>
           <div class="product__body">
             <span class="tag">Professionnel</span>
             <h3>Pro Sécurité</h3>
@@ -253,7 +253,10 @@
           </li>
         </ul>
       </div>
-      <form class="form" id="quoteForm">
+      <form class="form" id="quoteForm" action="https://formspree.io/f/xredooep" method="POST">
+        <input type="hidden" name="_subject" value="Nouveau devis - Planete Metal">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;">
         <div class="field">
           <label for="name">Nom complet</label>
           <input id="name" name="name" type="text" required />
@@ -282,16 +285,24 @@
           <textarea id="msg" name="msg" rows="4" placeholder="Dimensions, contraintes, délais souhaités..."></textarea>
         </div>
         <button type="submit" class="btn btn--primary btn--lg btn--block">Envoyer ma demande</button>
-        <p class="form__note" id="formNote"></p>
+        <p class="form__note" id="formNote">Votre message sera envoyé via Formspree.</p>
       </form>
     </div>
   </section>
 </main>
 
+<div class="form-popup" id="formPopup" aria-hidden="true" role="status" aria-live="polite">
+  <div class="form-popup__card">
+    <div class="form-popup__icon">✓</div>
+    <h3>Thank you!</h3>
+    <p>We will reach out to you soon.</p>
+  </div>
+</div>
+
 <footer class="footer">
   <div class="container footer__inner">
-    <div class="brand"><img src="assets/logo.svg" alt="Planète Métal" class="brand__logo"></div>
-    <p>© <span id="year"></span> Planète Métal — Installation de rideaux aluminium. Tous droits réservés.</p>
+    <div class="brand"><img src="assets/logo-white.svg" alt="Planète Métal" class="brand__logo"></div>
+    <p>© <span id="year"></span> Planète Métal — Installation de rideaux métalliques. Tous droits réservés.</p>
     <div class="footer__links">
       <a href="#">Mentions légales</a>
       <a href="#">CGV</a>

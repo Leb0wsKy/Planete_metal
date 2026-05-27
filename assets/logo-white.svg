@@ -1,23 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 72" width="260" height="72" role="img" aria-label="Planète Métal logo">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" width="72" height="72" role="img" aria-label="Planete Metal logo">
   <defs>
     <clipPath id="planetClipW">
       <circle cx="36" cy="36" r="24"/>
     </clipPath>
     <mask id="ringFrontW">
-      <rect width="260" height="72" fill="black"/>
+      <rect width="72" height="72" fill="black"/>
       <path d="M36,36 L80,72 L0,72 Z" fill="white"/>
     </mask>
     <mask id="ringBackW">
-      <rect width="260" height="72" fill="white"/>
+      <rect width="72" height="72" fill="white"/>
       <circle cx="36" cy="36" r="24" fill="black"/>
+    </mask>
+    <mask id="topCutW">
+      <rect width="72" height="72" fill="white"/>
+      <ellipse cx="36" cy="10" rx="19" ry="8" fill="black"/>
     </mask>
   </defs>
 
-  <!-- Ring behind planet -->
-  <ellipse cx="36" cy="36" rx="44" ry="13"
-           fill="none" stroke="#ED2939" stroke-width="3"
-           transform="rotate(-25 36 36)"
-           mask="url(#ringBackW)" opacity="0.55"/>
+  <!-- Ring layers (wrapped) with top-center arc removed -->
+  <g mask="url(#topCutW)">
+    <ellipse cx="36" cy="36" rx="34" ry="11"
+             fill="none" stroke="#ED2939" stroke-width="3"
+             transform="rotate(-25 36 36)"
+             mask="url(#ringBackW)" opacity="0.55"/>
+    <ellipse cx="36" cy="36" rx="34" ry="11"
+             fill="none" stroke="#ED2939" stroke-width="3"
+             transform="rotate(-25 36 36)"
+             mask="url(#ringFrontW)"/>
+  </g>
 
   <!-- Planet body -->
   <circle cx="36" cy="36" r="24" fill="#002395"/>
@@ -32,32 +42,25 @@
     <rect x="12" y="55" width="48" height="4.5" rx="1" fill="rgba(255,255,255,0.14)"/>
   </g>
 
+  <!-- Slight darkening layer for better text legibility -->
+  <circle cx="36" cy="36" r="24" fill="rgba(0,0,0,0.18)"/>
+
   <!-- Subtle highlight sphere glint -->
   <ellipse cx="28" cy="25" rx="9" ry="6" fill="rgba(255,255,255,0.10)" transform="rotate(-15 28 25)"/>
 
   <!-- Planet border -->
   <circle cx="36" cy="36" r="24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
 
-  <!-- Ring in front of planet -->
-  <ellipse cx="36" cy="36" rx="44" ry="13"
-           fill="none" stroke="#ED2939" stroke-width="3"
-           transform="rotate(-25 36 36)"
-           mask="url(#ringFrontW)"/>
-
-  <!-- ── WORDMARK ── -->
-
-  <!-- PLANÈTE in white -->
-  <text x="96" y="34"
+  <!-- Text inside planet -->
+  <text x="36" y="33"
+        text-anchor="middle"
         font-family="'Arial Black', 'Haettenschweiler', Impact, sans-serif"
-        font-weight="900" font-size="22" letter-spacing="2"
+        font-weight="900" font-size="8" letter-spacing="0.8"
         fill="#ffffff">PLAN&#200;TE</text>
-
-  <!-- Thin separator line -->
-  <rect x="96" y="39" width="152" height="2" rx="1" fill="#ED2939"/>
-
-  <!-- MÉTAL in red -->
-  <text x="96" y="62"
+  <rect x="19" y="36" width="34" height="1.8" rx="1" fill="#ED2939"/>
+  <text x="36" y="46"
+        text-anchor="middle"
         font-family="'Arial Black', 'Haettenschweiler', Impact, sans-serif"
-        font-weight="900" font-size="22" letter-spacing="5"
+        font-weight="900" font-size="8.2" letter-spacing="1.4"
         fill="#ED2939">M&#201;TAL</text>
 </svg>

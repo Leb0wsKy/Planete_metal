@@ -52,15 +52,68 @@ const io = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 reveals.forEach(el => io.observe(el));
 
-// Form handler
+// Formspree submit + thank-you popup
 const form = document.getElementById('quoteForm');
 const note = document.getElementById('formNote');
-form?.addEventListener('submit', (e) => {
+const popup = document.getElementById('formPopup');
+let popupTimer = null;
+
+function hidePopup() {
+  if (!popup) return;
+  popup.classList.remove('is-visible');
+  popup.setAttribute('aria-hidden', 'true');
+}
+
+function showPopup() {
+  if (!popup) return;
+  popup.classList.add('is-visible');
+  popup.setAttribute('aria-hidden', 'false');
+  window.clearTimeout(popupTimer);
+  popupTimer = window.setTimeout(hidePopup, 3000);
+}
+
+form?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const data = Object.fromEntries(new FormData(form).entries());
-  note.textContent = `Merci ${data.name.split(' ')[0]} ! Votre demande a bien été envoyée. Nous vous recontactons sous 24h.`;
-  form.reset();
-  setTimeout(() => note.textContent = '', 6000);
+
+  const submitButton = form.querySelector('button[type="submit"]');
+  const endpoint = (form.getAttribute('action') || '').trim();
+  const data = new FormData(form);
+
+  if (!endpoint || endpoint.includes('your_form_id')) {
+    note.textContent = 'Configuration requise: remplacez your_form_id par votre identifiant Formspree.';
+    return;
+  }
+
+  if (submitButton) submitButton.disabled = true;
+  note.textContent = 'Envoi en cours...';
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: data
+    });
+
+    const payload = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(payload.errors?.[0]?.message || payload.error || 'Erreur lors de l\'envoi.');
+    }
+
+    form.reset();
+    note.textContent = '';
+    showPopup();
+  } catch (error) {
+    note.textContent = error.message || 'Impossible d\'envoyer votre demande pour le moment.';
+  } finally {
+    if (submitButton) submitButton.disabled = false;
+  }
+});
+
+popup?.addEventListener('click', (event) => {
+  if (event.target === popup) {
+    hidePopup();
+  }
 });
 
 // Testimonials slider
